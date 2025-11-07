@@ -1,74 +1,76 @@
 using UnityEngine;
 
-// Ensures that the GameObject always has Rigidbody2D and Collider2D components
-// (garante que o objeto tenha esses componentes — evita erro se eu esquecer de adicionar)
-[RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
+// Ensures the GameObject has a Rigidbody2D component
+// (garante que o objeto tenha um Rigidbody2D, mas não trava o tipo de collider)
+[RequireComponent(typeof(Rigidbody2D))]
 public class PlayerPhysics : MonoBehaviour
 {
+    // --- MOVEMENT VARIABLES ---
+
     // Speed of horizontal movement
-    // (velocidade que o player se move para os lados)
+    // (velocidade lateral do personagem)
     [SerializeField] private float moveSpeed = 5f;
 
     // Force applied when jumping
-    // (força do pulo — se aumentar, ele voa mais alto)
+    // (força do pulo — quanto maior, mais Sonic e menos ser humano)
     [SerializeField] private float jumpForce = 7f;
 
-    // Reference to the Rigidbody2D component for physics interactions
-    // (pra eu conseguir aplicar velocidade e força via código)
+    // Rigidbody2D reference for applying physics
+    // (pra mandar o player voar com estilo)
     private Rigidbody2D rb;
 
-    // Indicates whether the player is touching the ground
-    // (saber se tá encostando no chão pra não pular no ar)
+    // Whether the player is touching the ground
+    // (pra saber se dá pra pular ou se vai ser só vergonha)
     private bool isGrounded;
 
-    void Awake()
+    // --- UNITY EVENTS ---
+
+    private void Awake()
     {
-        // Gets the Rigidbody2D component attached to the player
-        // (pega o rigidbody automaticamente quando o jogo inicia)
+        // Gets the Rigidbody2D component when the game starts
+        // (pega o rigidbody automaticamente, porque lembrar de adicionar é pedir demais)
         rb = GetComponent<Rigidbody2D>();
     }
 
-    void Update()
+    private void Update()
     {
-        // --- Movement ---
-        // Reads horizontal input (A/D or arrow keys)
-        // (pega o valor do teclado pra mover o personagem)
+        // --- HORIZONTAL MOVEMENT ---
+        // Reads input from A/D or arrow keys
+        // (pega o input do teclado — vamos dar aquele drift lateral)
         float move = Input.GetAxis("Horizontal");
 
-        // Sets the velocity for movement while keeping vertical speed from gravity
-        // (mexe só no eixo X, o Y continua sendo controlado pela gravidade)
+        // Applies horizontal velocity while keeping vertical one
+        // (só mexe no eixo X, o Y continua sob a lei da gravidade)
         rb.linearVelocity = new Vector2(move * moveSpeed, rb.linearVelocity.y);
 
-        // --- Jump ---
-        // Checks if Jump button (Space) is pressed and player is on the ground
-        // (só deixa pular se estiver encostando no chão)
+        // --- JUMP ---
+        // If Jump (Space) is pressed and player is grounded
+        // (pula se estiver no chão — sem truques de pular no ar)
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
-            // Adds an upward impulse to make the player jump
-            // (impulse = empurrão instantâneo pra cima)
-            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         }
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    // --- COLLISION DETECTION ---
+
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        // When colliding with an object tagged as Ground, set isGrounded to true
-        // (se encostar no chão, libera o pulo de novo)
+        // Checks if player touched the ground
+        // (se encostou no chão, então é isso: chão confirmado)
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = true;
         }
     }
 
-    void OnCollisionExit2D(Collision2D collision)
+    private void OnCollisionExit2D(Collision2D collision)
     {
-        // When no longer touching the Ground, disable jumping
-        // (saiu do chão, então não pode mais pular)
+        // Checks if player left the ground
+        // (saiu do chão, hora de se arrepender das decisões)
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = false;
         }
     }
 }
-// added comment to test commit
-// banana
