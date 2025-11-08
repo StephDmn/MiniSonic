@@ -5,11 +5,25 @@ TagManager:
   serializedVersion: 3
   tags:
   - Ground
+  - Ring
+  - Score
+  - Platafaform
+  - GroundCheck
+  - EnemyCround
+  - Enemy
+  - Background
+  - GoalRing
+  - WinPanel
+  - Exit
+  - Restart
+  - Play
+  - CommingSoon
+  - VictoryManager
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ground
   - Water
   - UI
   - 
@@ -41,6 +55,9 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 1409523165
     locked: 0
   m_RenderingLayers:
   - Default

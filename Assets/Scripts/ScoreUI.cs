@@ -1,39 +1,54 @@
-using UnityEngine;
-using TMPro;  // TextMeshPro for UI text
-// importa o tipo de texto chique da UI
+Ôªøusing UnityEngine;
+using TMPro; // Needed for TextMeshPro text
+// Necess√°rio para usar o TextMeshPro
 
-/// Handles the score display on screen
-/// respons·vel por mostrar quantos anÈis eu j· roubei
 public class ScoreUI : MonoBehaviour
 {
-    // Reference to the TextMeshProUGUI component that shows the score
-    // a caixinha de texto "Rings: 0"
-    [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private TMP_Text scoreText;
+    // Reference to the UI text that displays the score
+    // Refer√™ncia para o texto de UI que mostra o placar (an√©is)
 
-    // Current score value
-    // contador oficial de riqueza
-    private int currentScore = 0;
+    private int score = 0;
+    // Current score (number of rings)
+    // Placar atual (quantidade de an√©is)
 
     private void Start()
     {
-        // Initialize UI text when the scene starts
-        // garante que o texto comeÁa certinho com o valor inicial
+        // Make sure the UI is updated at the start
+        // Garante que o texto comece com o valor certo
         UpdateScoreText();
     }
 
-    // Adds value to the score and updates the UI
-    // somar pontos porque merecemos
     public void AddScore(int amount)
     {
-        currentScore += amount;
+        // Increases the score by the given amount
+        // Aumenta o placar pela quantidade recebida
+        score += amount;
         UpdateScoreText();
     }
 
-    // Updates the text component with the current score
-    // atualiza o HUD pra mostrar q estamos rycos
+    public void ResetScore()
+    {
+        // Resets the score to zero
+        // Zera o placar (perde todos os an√©is)
+        score = 0;
+        UpdateScoreText();
+    }
+
+    public int GetScore()
+    {
+        // Returns the current score
+        // Retorna o placar atual (quantos an√©is o player tem)
+        return score;
+    }
+
     private void UpdateScoreText()
     {
-        scoreText.text = "Rings: " + currentScore;
+        // Updates the UI text with the current score
+        // Atualiza o texto da interface com o valor do placar
+        if (scoreText != null)
+        {
+            scoreText.text = score.ToString();
+        }
     }
 }
-

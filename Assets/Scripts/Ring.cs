@@ -1,33 +1,31 @@
 using UnityEngine;
 
-// Handles ring collection and score update
-// Gerencia o drama inteiro de pegar o anel e atualizar o bendito placar
 public class Ring : MonoBehaviour
 {
-    // Number of points this ring gives
-    // Valor do anel — quanto mais, mais ryca
     [SerializeField] private int value = 1;
+    // How many points this ring gives
+    // Quantos pontos (anéis) este ring vale
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Check if the colliding object is the player
-        // Se quem encostou foi o player, então bora pegar o anel
-        if (other.CompareTag("Player"))
+        // Only react if the object that touched is the player
+        // Só reage se quem encostou for o player
+        if (!other.CompareTag("Player"))
+            return;
+
+        // Try to find the ScoreUI in the scene
+        // Tenta encontrar o ScoreUI na cena
+        ScoreUI scoreUI = FindFirstObjectByType<ScoreUI>();
+
+        if (scoreUI != null)
         {
-            // Try to find the ScoreUI in the scene
-            // Unity, eu imploro, acha esse script, pelo amor dos deuses do C#
-            ScoreUI scoreUI = FindFirstObjectByType<ScoreUI>();
-
-            if (scoreUI != null)
-            {
-                // Add the ring's value to the score
-                // Ufa! Finalmente alguma coisa deu certo
-                scoreUI.AddScore(value);
-            }
-
-            // Destroy the ring after it's collected
-            // Adeus, pequeno anel pixelado, cumpriste teu destino
-            Destroy(gameObject);
+            // Add this ring's value to the score
+            // Adiciona o valor deste anel ao placar
+            scoreUI.AddScore(value);
         }
+
+        // Destroy the ring after being collected
+        // Destrói o anel depois de ser coletado
+        Destroy(gameObject);
     }
 }
